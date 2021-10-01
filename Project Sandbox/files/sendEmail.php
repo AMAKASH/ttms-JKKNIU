@@ -2,6 +2,10 @@
 
 include 'connection.php';
 $id = $_GET['id'];
+
+if (isset($_GET['day'])) {
+    $day = $_GET['day'];
+}
 $q = mysqli_query(
     mysqli_connect("localhost", "root", "", "ttms"),
     "SELECT * FROM teachers WHERE Teacher_ID = '$id' "
@@ -130,6 +134,10 @@ $q = mysqli_query(mysqli_connect("localhost", "root", "", "ttms"), $get);
                     }
                     while ($row = mysqli_fetch_assoc($q)) {
                         $i++;
+                        if (isset($day) && $row['day'] != $day) {
+                            continue;
+                        }
+
 
                         echo "
                  <tr><td style=\"text-align:center\">$days[$i]</td>
@@ -156,7 +164,13 @@ $q = mysqli_query(mysqli_connect("localhost", "root", "", "ttms"), $get);
         bodyText += document.getElementById('TT').innerHTML;
         bodyText += "<br><br>Regards,<br>CSE Depertment,<br>JKKNIU";
 
-        sendEmail();
+        let subjectText = "Routine <?php echo $id ?>"
+        <?php
+        if (isset($day)) { ?>
+            subjectText += ' <?php echo "[" . $day . "]"; ?>';
+        <?php } ?>
+        console.log(subjectText);
+        //sendEmail();
 
         function sendEmail() {
             console.log('Triggered Send email')
@@ -166,7 +180,7 @@ $q = mysqli_query(mysqli_connect("localhost", "root", "", "ttms"), $get);
                 Password: "Csedept123",
                 To: '<?php echo $emailID ?>',
                 From: "demo.csedept@gmail.com",
-                Subject: "Routine <?php echo $id ?>",
+                Subject: subjectText,
                 Body: bodyText,
 
             }).then(

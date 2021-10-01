@@ -1,3 +1,8 @@
+<?php
+error_reporting(0);
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
+?>
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 

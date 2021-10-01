@@ -33,9 +33,9 @@
             </div>
             <div class="navbar-collapse collapse move-me">
                 <ul class="nav navbar-nav navbar-left">
-                    <li><a href="addteachers.php">ADD TEACHERS</a></li>
-                    <li><a href="addsubjects.php">ADD SUBJECTS</a></li>
-                    <li><a href="addclassrooms.php">ADD CLASSROOMS</a></li>
+                    <li><a href="addteachers.php">TEACHERS</a></li>
+                    <li><a href="addsubjects.php">SUBJECTS</a></li>
+                    <li><a href="addclassrooms.php">CLASSROOMS</a></li>
                     <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">ALLOTMENT
                             <span class="caret"></span></a>
                         <ul class="dropdown-menu">
@@ -50,7 +50,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li><a href="generatetimetable.php">GENERATE TIMETABLE</a></li>
+                    <li><a href="generatetimetable.php">TIMETABLE</a></li>
 
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
@@ -271,7 +271,8 @@
                 <th width="190">Designation</th>
                 <th width="190">Contact No.</th>
                 <th width="290">Email ID</th>
-                <th width="150">Action</th>
+                <th width="160">Action</th>
+                <th width="50">Day</th>
             </tr>
             <tbody>
                 <?php
@@ -282,15 +283,26 @@
                 );
 
                 while ($row = mysqli_fetch_assoc($q)) {
-                    echo "<tr><td>{$row['Teacher_ID']}</td>
+                    echo "<tr id='{$row['Teacher_ID']}'><td>{$row['Teacher_ID']}</td>
                     <td>{$row['name']}</td>
                     <td>{$row['alias']}</td>
                     <td>{$row['designation']}</td>
                     <td>{$row['contact_number']}</td>
                     <td>{$row['email_id']}</td>
                    <td>
-                   <button onclick='sendEmail(\"{$row['Teacher_ID']}\")'>Send Email</button>
-                    <button onclick='deleteTeacher(\"{$row['Teacher_ID']}\")'>Delete</button></td>
+                    <button onclick='sendEmail(\"{$row['Teacher_ID']}\")'>Send Email</button>
+                    <button onclick='deleteTeacher(\"{$row['Teacher_ID']}\")'>Delete</button>
+                    </td>
+                    <td>
+                    <select id='week_day'class='list-group-item'>
+                    <option selected value='0'>Select Day</option>
+                    <option value='1'> SUNDAY</option>
+                    <option value='2'> MONDAY</option>
+                    <option value='3'> TUESDAY</option>
+                    <option value='4'> WEDNESDAY</option>
+                    <option value='5'> THURSDAY</option>  
+                    </select>
+                    </td>
                     </tr>\n";
                 }
                 //echo "<script>deleteHandlers();</script>";
@@ -310,10 +322,21 @@
 
             function sendEmail(id) {
                 console.log(id);
+                const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
+                const row = document.getElementById(id);
+                let selected = row.getElementsByTagName('select')[0];
+
+                let value = selected.options[selected.selectedIndex].value;
+                //console.log(selected)
+                //console.log(value)
                 confirmed = confirm("Are You Sure?");
-                console.log(confirmed);
+
                 if (confirmed) {
-                    window.location.href = "sendEmail.php?id=" + id;
+                    let redirect = "sendEmail.php?id=" + id;
+                    if (value != 0) {
+                        redirect += '&day=' + days[value - 1];
+                    }
+                    window.location.href = redirect
 
                 }
             }
