@@ -1,7 +1,7 @@
 <?php
 // Turn off all error reporting
-//error_reporting(0);
-//error_reporting(E_ERROR | E_WARNING | E_PARSE);
+error_reporting(0);
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
 session_start();
 ?>
 <!DOCTYPE html>
